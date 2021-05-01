@@ -1,5 +1,3 @@
-
-
 class Singleton{
 private:
     Singleton();
@@ -19,11 +17,6 @@ Singleton* Singleton::getInstance() {
     return m_instance;
 }
 
-
-
-
-
-
 //线程安全版本，但锁的代价过高
 Singleton* Singleton::getInstance() {
     Lock lock;
@@ -32,14 +25,6 @@ Singleton* Singleton::getInstance() {
     }
     return m_instance;
 }
-
-
-
-
-
-
-
-
 
 //双检查锁，但由于内存读写reorder不安全
 Singleton* Singleton::getInstance() {
@@ -52,13 +37,6 @@ Singleton* Singleton::getInstance() {
     }
     return m_instance;
 }
-
-
-
-
-
-
-
 
 //C++ 11版本之后的跨平台实现 (volatile)
 std::atomic<Singleton*> Singleton::m_instance;

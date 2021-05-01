@@ -26,7 +26,7 @@ int tcp_connect_server(const char* server_ip, int port);
 void cmd_msg_cb(int fd, short events, void *arg);
 void socket_read_cb(int fd, short events, void *arg);
 
-int main(int argc, char **argv)
+int main(int argc, char **argv)//para 1   IP  para   port
 {
     if(argc < 3)
     {
@@ -42,7 +42,7 @@ int main(int argc, char **argv)
     }
     printf("connect to server successful\n");
 
-    struct event_base* base = event_base_new();
+    struct event_base* base = event_base_new();//创建一个默认属性的struct event_base对象
     struct event* ev_sockfd = event_new(base, sockfd, EV_READ|EV_PERSIST, socket_read_cb, NULL);
 
     event_add(ev_sockfd, NULL);
@@ -108,7 +108,7 @@ int tcp_connect_server(const char* server_ip, int port)
         errno = save_errno;
         return -1;
     }
-    evutil_make_socket_noblocking(sockfd);
+    evutil_make_socket_noblocking(sockfd);//evutil系列    用以解决不同平台上网络实现的不同
     return sockfd;
 }
 

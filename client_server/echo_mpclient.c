@@ -52,6 +52,8 @@ void read_routine(int sock, char *buf)
     while(1)
     {
         int str_len=read(sock, buf, BUF_SIZE);
+        if(str_len==0)
+            return;
 
         message[str_len] = 0;
         printf("message from server:%s", buf);
@@ -65,12 +67,10 @@ void write_routine(int sock, char *buf)
 
         if(!strcmp(buf, "q\n")||!strcmp(buf, "Q\n"))
         {
+            shutdown(sock, SHUT_WR);
             return;
         }
         write(sock, buf, strlen(buf));
-        str_len=read(sock, buf, BUF_SIZE-1);
-        message[str_len] = 0;
-        printf("message from server:%s", buf);
     }
 }
 

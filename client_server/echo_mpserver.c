@@ -63,7 +63,7 @@ int main(int argc, char *argv[])
         }
         if(pid == 0)
         {
-            close(serv_sock);//这里这个是不是可以省略？
+            close(serv_sock);//这里这个是不是可以省略？ 因为后面返回了 相当于进程退出了， 退出了文件描述符自动关闭了
             while((str_len=read(clnt_sock, message, BUF_SIZE))!=0)
                 write(clnt_sock, message, str_len);
             close(clnt_sock);
