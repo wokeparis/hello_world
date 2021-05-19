@@ -207,6 +207,8 @@ void sort_quick(vector<int>& list)
 }
 
 
+
+
 int main()
 {
     vector<int> list = {3,4,7,1,8,2,9,0,5,6};
