@@ -1,17 +1,21 @@
-#include <stdio.h>
+#include <set>
+#include <tuple>
 #include <iostream>
-
 using namespace std;
 
+class BASE
+{
+    int a;
+};
+
+class Derive: public BASE
+{
+    int b;
+};
 
 int main()
 {
-    unsigned int b = 0;
-    
-    for(int i = 0; i < b-1; i++)
-    {
-        cout<<b-1<<endl;
-        break;
-    }
-    return 0;
+    BASE* b = new BASE;
+    Derive* a = dynamic_cast<Derive*>(b);
+    cout<<"ok"<<endl;
 }
