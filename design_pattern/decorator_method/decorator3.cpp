@@ -120,3 +120,17 @@ void Process(){
     
 
 }
+
+class base
+{
+    void function()
+    {
+        return 0;
+    }
+};
+
+class decorater
+{
+    virvual ~decorator();
+}
+

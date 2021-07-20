@@ -15,8 +15,8 @@ public:
 
 		FileSplitter splitter(filePath, number);
 
-		splitter.addIProgress(this); //¶©ÔÄÍ¨Öª
-		splitter.addIProgress(&cn)£» //¶©ÔÄÍ¨Öª
+		splitter.addIProgress(this); //ï¿½ï¿½ï¿½ï¿½Í¨Öª
+		splitter.addIProgress(&cn)ï¿½ï¿½ //ï¿½ï¿½ï¿½ï¿½Í¨Öª
 
 		splitter.split();
 
@@ -35,4 +35,5 @@ public:
 		cout << ".";
 	}
 };
+
 

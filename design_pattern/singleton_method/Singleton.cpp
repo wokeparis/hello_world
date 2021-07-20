@@ -2,6 +2,7 @@ class Singleton{
 private:
     Singleton();
     Singleton(const Singleton& other);
+    Singleton& operator=(const Singleton& other);
 public:
     static Singleton* getInstance();
     static Singleton* m_instance;
@@ -57,10 +58,44 @@ Singleton* Singleton::getInstance() {
     return tmp;
 }
 
+#include <iostream>
+class Singleton
+{
+    public:
+        ~Singleton();
+        Singleton(const Singleton&)=delete;
+        Singleton& operator=(const Singleton&)=delete;
+        static Singleton& get_instance()
+        {
+            static Singleton instance;
+            return instance;
+        }
+    private:
+    Singleton();
+};
+
+int main(int argc, char *argv[])
+{
+    Singleton& instance_1 = Singleton::get_instance();
+    Singleton& instance_2 = Singleton::get_instance();
+    return 0;
+}
 
 
-
-
+class A
+{
+    public:
+        ~A();
+        static A& get_instance()
+        {
+            static A a;
+            return a;
+        }
+    private:
+        A();
+        A(const A&);
+        A& operator=(const A&);
+}
 
 
 
