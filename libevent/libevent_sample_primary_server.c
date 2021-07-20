@@ -46,6 +46,7 @@ void accept_cb(int fd, short events, void* arg)
     struct event_base* base = (event_base*)arg;
     struct event *ev = event_new(NULL, -1, 0, NULL, NULL);
     event_assign(ev, base, sockfd, EV_READ|EV_PERSIST, socket_read_cb, (void*)ev);
+    //event_new 每次都会分配内存， 已经初始化或者处于 pending 的 event，首先需要调用 event_del() 后再调用 event_assign()。这个时候就可以重用这个event了
     event_add(ev, NULL);
 }
 
