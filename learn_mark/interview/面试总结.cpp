@@ -276,6 +276,217 @@ static 局部变量内存是在程序加载的时候就已经预留了，初始�
 
 线程切换：进程是资源分配的基本单位  线程是CPU调度的基本单位  一个进程下可能有多个线程   线程共享进程的资源
 
+接收一个网络包会进去几次内核态：
+
+实现一个unique_ptr:
+#include <iostream>
+using namespace std;
+template<typename T>
+class munique_ptr{
+    T *ptr;
+    public:
+    munique_ptr(T *_ptr=NULL):ptr(_ptr){}
+    ~munique_ptr()
+    {
+        delete ptr;
+    }
+    //删除拷贝构造函数
+    munique_ptr(const munique_ptr &r)=delete;
+    //删除赋值运算符重载函数
+    munique_ptr &operator=(const munique_ptr &r)=delete;
+
+    T operator*()
+    {
+        return *ptr;
+    }
+};
+int main(void)
+{
+    munique_ptr<double> ptr(new double(3.14));
+    cout<<*ptr<<endl;
+    munique_ptr<double> ptr1=ptr;
+    munique_ptr<double> ptr2;
+    ptr2=ptr;
+}
+
+如何让一个对象只能在栈上创建：
+
+class AA
+{
+private:
+	void* operator new(size_t){}
+	void operator delete(void*){}
+public:
+	AA()
+	{
+		cout << "AA()" << endl;
+	}
+	~AA()
+	{
+		cout << "~AA()" << endl;
+	}
+};
+
+如何让一个对象只能在堆上创建：
+将类中构造，析构定义为私有，然后定义一个公有的静态成员函数，此种方法，只能使用new创建对象，即只能在堆上创建对象。
+解析：
+当对象建立在栈上时，是由编译器分配内存的，调用构造函数和析构函数，编译器管理了对象的整个周期。如果编译器无法调用析构是怎样的呢？
+如果类的析构函数是私有的，编译器将无法调用析构函数来释放内存。所以，编译器在为类对象分配栈空间时，会先检查析构函数的访问性，不光是析构函数，只要是非静态函数，
+编译器都会检查，如果类的析构函数是私有的，则编译器不会在栈空间上为类对象分配内存。
+
+class AA
+{
+public:
+	AA()
+	{
+		cout << "AA()" << endl;
+	}
+	//加一个函数（delete this），然后析构的时候就不用delete了  用这个函数
+private:
+    
+	~AA()
+	{
+		cout << "~AA()" << endl;
+	}
+};
+ 
+int main()
+{
+	//AA q;   //在栈上创建对象
+	AA* p = new AA;   //在堆上创建对象
+	system("pause");
+	return 0;
+}
+
+迭代器的种类：
+输入迭代器， 输出迭代器，正向迭代器，双向迭代器，随机访问迭代器
+            input         output
+              \            /
+                 forward
+                     |
+                bidirectional
+                     |
+               random access
+————————————————
+https://blog.csdn.net/kai8wei/article/details/77606685
+
+
+设计一个迭代器：
+
+/*
+    自定义迭代器的实现
+*/
+#include <iostream>
+using namespace std;
+class num
+{
+    int val;    //具体的数字
+    int length; //数字的位数
+    void getlength(){
+        if(val/10==0){      //这个数字只有1位
+            length=1;
+            return;
+        }
+        int x=10;           //这里就是不断重复除直到为0，从而得出数字的具体位数
+        int pow=0;
+        int num=val;
+        while(num!=0){
+            num/=10;
+            pow++;
+        }
+        length=pow;
+    }
+public:
+    num(int num)
+    { //以下是一些基本的函数，用于设置值
+        val=num;
+        getlength();
+    }
+    void set(int num)
+    {
+        val = num;
+        getlength();
+    }
+    int get()
+    {
+        return val;
+    }
+    //以下是迭代器的部分
+    class iterator
+    {
+        int pos;    //数字的下标
+        num* obj;   //如果要在迭代器里面访问num的内容，必须要这个
+    public:
+        /*
+            迭代器，要重载*,++,--
+        */
+        iterator(num* ptr,int n)
+        {
+            pos = n;
+            obj = ptr;
+        }
+        iterator()
+        {
+            //空构造器
+            pos = 0;
+            obj = nullptr;
+        }
+        //操作符
+        void operator++(){  //注意，这种没有参数的++重载的是前置的++   ++it
+            pos++;
+        }
+        void operator++(int i){  //这种有任意int参数的重载的是后缀++  it++
+            pos++;
+        }
+        void operator--(){
+            pos--;
+        }
+        void operator--(int i){  
+            pos--;
+        }
+        int operator*()const{
+            //13324 取第二位10位：  (13324%100)/10
+            //num  去除第n位     (num % 10^(n))/ 10^(n-1)
+            if(pos>=obj->length) return -1;
+            if(pos==0)return obj->val%10;
+ 
+            int o=10;
+            int pow=0;
+            while(pow<(pos-1)){
+               // cout<<pow<<" "<<pos<<endl;
+                o*=10;
+                pow++;
+            }
+            return (obj->val%(o*10))/(o);
+        }
+        bool operator!=(const iterator& it){
+            return it.pos!=pos;
+        }
+        bool operator==(const iterator& it){
+            return it.pos==pos;
+        }
+    };
+    //获取迭代器，常见的比如begin,end;
+    iterator begin()
+    {
+        return iterator(this,0);
+    }
+    iterator end()
+    {
+        return iterator(this,length);
+    }
+};
+int main()
+{
+    num a(123456789);
+    for(auto it=a.begin();it!=a.end();it++){
+        cout<<*it<<" ";
+    }
+    cout<<endl;
+    
+    return 0;
 
 阿里：
 1.没有用到this指针的成员函数，可以用一个nullptr对象来调用。
+2.红黑树时间复杂度，插入全部数据的时间复杂度是nlogn，插入删除查找的时间复杂度是logn
+哈希表的插入删除查找一般认为是1
