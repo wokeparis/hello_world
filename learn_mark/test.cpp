@@ -1,7 +1,7 @@
 #include <iostream>
 #include <stack>
 using namespace std;
-
+/*
 struct Node
 {
 	Node(Node* node = nullptr, int lval = 0):next(node),val(lval)
@@ -62,6 +62,7 @@ int main()
 	}
 
 }
+*/
 /*
 输入：head = [1,2,3,3,4,4,5]
 输出：[1,2,5]
@@ -123,10 +124,24 @@ ListNode* merge(ListNode* list1, ListNode* list2)
 	}
 	return prev.next;
 }
+*/
+class AA
+{
+public:
+	~AA(){}
+	static AA* get(){
+		return new AA;
+	}
+	//void destory(){delete this;}//析构的时候不能用delete，因为析构私有  用这个函数
+private:
+	AA(){}
+
+};
 
 int main()
 {
-	ListNode* tmp1 = new Node();
+	AA* a = AA::get();
+	delete a;
 }
-*/
+
 
