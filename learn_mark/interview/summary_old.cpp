@@ -13,7 +13,7 @@
 //1.一个可执行文件 由代码段（text）、只读数据段.rodata（const全局变量）、已初始化的读写数据段data（static，全局变量），未初始化数据区bss(只存储大小和符号等信息，并不事实分配空间)。
 //c++11 final的作用有两个，一个用来标记类不能作为基类，一个用来标记函数无法被重写。 override的作用是标记一定要进行重写，防止出现某些手误造成的错误，而且能更直观。 还有default和delete，delete并不是只能用于那几个默认生成的函数，也能用于转换函数，new重载等
 //构造函数里是可以有this指针的，但是初始化列表里不能有。
-
+//必须需要初始化列表的变量：引用、const、无默认构造函数的类。
 
 
 
@@ -124,5 +124,21 @@ https://zhuanlan.zhihu.com/p/63179839
     如果读的时候又来数据了，然后读完了，直接触发再来一次recv直接报错也相当于读完。
     如果读的时候一直来数据。会造成饥饿，所有的其他fd无法操作，然后可以自己维护一个列表，每个fd操作一定次，然后循环操作，直到所有fd都不是active
     触发条件测试。如果收到一个fin，水平模式和触发模式的情况
-        都会触发，通过判断read返回值=0。也可以通过触发epollrdhup来判断。
+        都会触发，通过判断read返回值=0。也可以通过触发epollrdhup来判断。 
+*/
+/*
+单例模式：
+class Test
+{
+	private:
+		Test();
+		Test(const Test&) = delete;
+		Test& operator = (const Test&) = delete;
+	public:
+		static Test&  get_instance()
+		{
+			static Test tmp;
+			return tmp;
+		}
+}
 */

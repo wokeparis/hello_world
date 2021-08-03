@@ -17,7 +17,7 @@ public:
 		}
 		else
 		{
-			_count = new size_t(0);//这里直接不管_ptr是否是0就可以了吧，判断了还会出现内存泄漏
+			_count = new size_t(0);//传入nullptr，初始引用计数为0
 		}
 	}
 
@@ -68,7 +68,7 @@ public:
 		return *(this->_ptr);
 	}
 
-	T *operator->()
+	T *operator->()//s->draw()相当于是(s.operator->())->draw()  所以只需要返回指针就可以了
 	{
 		assert(this->_ptr != nullptr);
 		return this->_ptr;
@@ -155,10 +155,6 @@ double dd = my_cast(('3' + string(".2222")).c_str());
 */
 stl容器里可以用引用吗？stl会对保存在东西进行构造，stl里面会有指针指向存进来的对象，首先引用不是对象，然后指针是不能指向引用的，引用只是一个别名没有地址。
 stack和queue为什么没有迭代器
-
-
-必须需要初始化列表的变量：引用 const 无默认构造函数的类
-
 
 4.虚函数表的调用方式。//知乎
 
@@ -407,3 +403,5 @@ int main()
 
 stone:
 1.如何让程序只启动一个，程序启动的时候ps查看进程中是否有同名进程，如果有的话退出报错.
+
+https://blog.csdn.net/Fly_as_tadpole/article/details/88378410

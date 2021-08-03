@@ -144,4 +144,62 @@ int main()
 	delete a;
 }
 
+template<class T>
+class Smart_ptr
+{
+	private:
+		T * ptr_;
+		int * count_;
+	public:
+		Smart_ptr(T* para):ptr_(para)
+		{
+			if(ptr_)
+			{
+				count_ = new int(1);
+			}
+		}
+
+		~Smart_ptr()
+		{
+			(*count_)--;
+			if(*count_==0)
+			{
+				delete count_;
+				delete ptr_;
+			}
+		}	
+
+		Smart_ptr(const Smart_ptr& tmp)
+		{
+			count_ = tmp.count_;
+			ptr_ = tmp.ptr_;
+			*count_++;
+		}
+
+		Smart_ptr& operator = (Smart_ptr& tmp)
+		{
+			if(&tmp == this)
+				return *this;
+			*count--;
+			if(*count_==0)
+			{
+				delete count_;
+				delete ptr_;
+			}			
+			count_ = tmp.count_;
+			ptr_ = tmp.ptr_;
+			*count_++;	
+			return *this;		
+		}
+		T& operator*()
+		{
+			assert(ptr_!=nullptr);
+			return *ptr_;
+		}
+		T* operator->()
+		{
+			assert(ptr_!=nullptr);
+			return ptr_;
+		}
+}
 
