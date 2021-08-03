@@ -142,3 +142,60 @@ class Test
 		}
 }
 */
+
+/*
+template<class T>
+class SmartPtr
+{
+	private:
+		T* ptr_;
+		size_t* count_;
+	public:
+		SmartPtr(T* tmp = nullptr):ptr_(tmp)
+		{
+			count_ = new size_t(1);
+		}	
+		~SmartPtr()
+		{
+			if(--(*count_) == 0)
+			{
+				delete count_;
+				delete ptr_;
+			}
+		}
+		SmartPtr(const SmartPtr& tmp)
+		{
+			ptr_ = tmp.ptr_;
+			count_ = tmp.count_;
+			++(*count_);
+		}	
+		SmartPtr& operator=(const SmartPtr& tmp)	
+		{
+			if(ptr_ == tmp.ptr_)
+				return *this;
+			else
+			{
+				if(--(*count_) == 0)
+				{
+					delete count_;
+					delete ptr_;
+				}				
+				ptr_ = tmp.ptr_;
+				count_ = tmp.count_;
+				++(*count_);
+				return *this;
+			}
+		}
+		T& operator*()
+		{
+			assert(_ptr != nullptr);
+			return *ptr_;
+		}
+
+		T* operator->()
+		{
+			assert(_ptr != nullptr);
+			return ptr_;
+		}
+}
+*/
