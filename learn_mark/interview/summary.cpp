@@ -1,18 +1,3 @@
-百度：
-
-2.内存泄漏如何调查：内存泄漏一般有两种结果，一个是程序down掉，也有可能不会down掉但是内存不足。或者莫名其妙被占用一大块内存，性能降低。
-内存泄漏的原因是堆内存申请后没有释放。有的时候也可以指文件描述符或者socket资源没有回收。同时也可以通过重载new来实现内存泄漏的定位，可以使用placecement new（即带参数的new）
-自己维护一个内存状态的数据结构(行号，函数等)，然后可以打印出来看看是不是有意料之外的内存。
-
-
-如果down掉，查看core文件，如果没有发现异常的退出点，就应该怀疑是内存泄漏。
-如果怀疑内存泄漏，通过free命令查看内存用量是否上升或者螺旋上升。也可以使用top和ps -aux来看
-查看/proc/进程号/map
-
-解决办法，尽可能使用只能指针。重载new delete方法添加统计内存分配和释放的模块。经验new delete自己控制好。
-使用valgrind的memcheck检查。面试官说大型工程不能用可以试一下。
-cppcheck华为。
-
 map<structA, structB> 
 /*
 struct hello
@@ -148,41 +133,6 @@ static 局部变量内存是在程序加载的时候就已经预留了，初始�
 
 接收一个网络包会进去几次内核态：
 
-实现一个unique_ptr:
-#include <iostream>
-using namespace std;
-template<typename T>
-class munique_ptr{
-    T *ptr;
-    public:
-    munique_ptr(T *_ptr=NULL):ptr(_ptr){}
-    ~munique_ptr()
-    {
-        delete ptr;
-    }
-    //删除拷贝构造函数
-    munique_ptr(const munique_ptr &r)=delete;
-    //删除赋值运算符重载函数
-    munique_ptr &operator=(const munique_ptr &r)=delete;
-
-    T operator*()
-    {
-        return *ptr;
-    }
-};
-int main(void)
-{
-    munique_ptr<double> ptr(new double(3.14));
-    cout<<*ptr<<endl;
-    munique_ptr<double> ptr1=ptr;
-    munique_ptr<double> ptr2;
-    ptr2=ptr;
-}
-
-
-
-
-
 迭代器的种类：
 输入迭代器， 输出迭代器，正向迭代器，双向迭代器，随机访问迭代器
             input         output
@@ -310,9 +260,6 @@ int main()
     cout<<endl;
     
     return 0;
-
-
-
 
 3.vector erase删除数据的时候要注意删除后迭代器已经不能使用了，删除vector中所有某一个值的情况一般先用remove，remove返回值是新的end 迭代器 p， 然后使用erase（p,end()）
 所有的stl容器erase后当前迭代器都不能用了，可以用返回值。
