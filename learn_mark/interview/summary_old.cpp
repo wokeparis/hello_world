@@ -289,3 +289,46 @@ public:
     }
 }
 */
+
+
+/* map<structA, structB> 
+struct hello
+{
+    int name;
+    int value;
+    bool operator <(const hello& a)const
+    {
+        return name < a.name;
+    }
+};
+
+struct compare
+{
+    bool operator()(hello a, hello b)//这里感觉还是像上面一样规范一点比较好，使用const引用而且函数为const函数
+    {
+        return a.name>b.name;
+    }
+};
+
+int main()
+{
+    hello test[10];
+    map<hello,int> tmp1;
+    map<hello,int, compare> tmp2;
+    for(int i = 0; i < 10; i++)
+    {
+        test[i].name = i;
+        test[i].value = i;
+        tmp1.insert(make_pair(test[i],i));
+        tmp2.insert(make_pair(test[i],i));
+    }   
+    for(auto i: tmp1)
+    {
+        cout<<i.second<<endl;
+    }    
+    for(auto i: tmp2)
+    {
+        cout<<i.second<<endl;
+    }
+}
+*/
