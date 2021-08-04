@@ -80,7 +80,7 @@ public:
 	static AA* get(){
 		return new AA;
 	}
-	//void destory(){delete this;}//析构的时候不能用delete，因为析构私有  用这个函数
+	//void destory(){delete this;}
 private:
 	AA(){}
 
@@ -143,7 +143,7 @@ class Test
 }
 */
 
-/*
+/*  shared_ptr
 template<class T>
 class SmartPtr
 {
@@ -197,5 +197,89 @@ class SmartPtr
 			assert(_ptr != nullptr);
 			return ptr_;
 		}
+    T* get()
+    {
+        return ptr_;
+    }
+    void reset(T* tmp)
+    {
+		if(ptr_ == tmp.ptr_)
+			return ;
+		else
+		{
+			if(--(*count_) == 0)
+			{
+				delete count_;
+				delete ptr_;
+			}				
+			ptr_ = tmp.ptr_;
+			count_ = tmp.count_;
+			++(*count_);
+			return ;
+		}	
+    }
+}
+*/
+/*unique_ptr
+template<class T>
+class auto_p{
+private:	
+	T *ptr_;
+public:
+	auto_p(T *tmp = nullptr):ptr_(tmp){}		//构造函数 
+	~auto_p()	//虚构函数 
+    {
+        if(ptr_) 
+            delete ptr_;
+    }    
+	auto_p(auto_p&& rhs):ptr_(rhs.ptr_)
+	{
+        rhs.ptr_ = nullptr;
+    }
+	//移动构造函数   
+	auto_p& operator=(auto_p &&rhs)
+    {
+        if(ptr_ != rhs.ptr_)
+        {
+            if(ptr_)
+                delete ptr_;          
+            ptr_ = rhs.ptr_;
+            rhs.ptr_ = nullptr;
+        }
+        return *this;
+    }
+
+	auto_p(const auto_p&) = delete;			//拷贝构造与赋值不能使用 
+	auto_p& operator=(const auto_p &) = delete;
+    T* operator->()
+    {
+        assert(ptr_!=nullptr);
+        return ptr_;
+    }
+    
+    T& operator*()
+    {
+        assert(ptr_!=nullptr);
+        return *ptr_;
+    }
+
+    T* release()
+    {
+        T* tmp = ptr_;
+        ptr_ = nullptr;
+        return tmp;
+    }
+
+    T* get()
+    {
+        return ptr_;
+    }
+
+    void reset(T* para)
+    {
+        if(ptr_)
+            delete ptr_;
+        ptr_ = para;
+    }
 }
 */
