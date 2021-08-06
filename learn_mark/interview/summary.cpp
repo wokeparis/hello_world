@@ -1,22 +1,4 @@
-如何使返回值也作为重载的判断依据：//感觉是歪门邪道
-又想到的法子，如果只是想要达到效果，把返回值作为参数，使用引用或指针返回。
-/*
-class my_cast {
-    const char* s;
-public:
-    template<class Target>
-    operator Target() const {
-        return static_cast<Target>(s);
-    }
-    my_cast(const char* s) : s(s) {}
-};
-string ss = my_cast("abcde");
-double dd = my_cast(('3' + string(".2222")).c_str());
-*/
-stl容器里可以用引用吗？stl会对保存在东西进行构造，stl里面会有指针指向存进来的对象，首先引用不是对象，然后指针是不能指向引用的，引用只是一个别名没有地址。
-stack和queue为什么没有迭代器
 
-4.虚函数表的调用方式。//知乎
 
 5.如何使用函数指针调用成员函数
 
